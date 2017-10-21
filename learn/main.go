@@ -1,3 +1,7 @@
+/*
+评论
+ */
+
 package main
 
 import "fmt"
