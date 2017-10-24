@@ -8,7 +8,11 @@ import (
 	"fmt"
 	"github.com/moxiaobai/goStudy/tools"
 	"sort"
+	"reflect"
 )
+
+//全局变量的申明和复制
+var name = "gopher"
 
 func main() {
 	fmt.Println("Hello World")
@@ -20,6 +24,8 @@ func main() {
 
 	learnSlice()
 	learnMap()
+	learnReflect()
+	learnChan()
 }
 
 //学习数组
@@ -81,4 +87,37 @@ func learnMap() {
 	for _, key := range keys {
 		fmt.Println(key, dict[key])
 	}
+}
+
+type User struct {
+	Name string
+	Age  int
+}
+
+//反射
+func learnReflect() {
+	u := User{"张三", 20}
+	t := reflect.TypeOf(u)
+	v := reflect.ValueOf(u)
+	fmt.Println(t)
+	fmt.Println(v)
+}
+
+//通道
+func learnChan() {
+	// 用make来声明一个slice，make会分配和初始化slice，map和channel。
+	//无缓冲通道（同步通道）
+	ch := make(chan int)
+
+	//用go关键字开始一个并发的goroutine
+	go func() {
+		var sum int = 0
+		for i := 0; i < 10; i++ {
+			sum += i
+		}
+		ch <- sum
+	}()
+	fmt.Println(<-ch)
+
+	//有缓冲通道
 }
