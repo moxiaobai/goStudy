@@ -1,16 +1,16 @@
 /*
 sockets
- */
+*/
 
 package main
 
 import (
-	"net"
 	"log"
+	"net"
 	//"io"
 	//"time"
-	"fmt"
 	"bufio"
+	"fmt"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 
 	for {
 		conn, err := listener.Accept()
-		if err !=nil {
+		if err != nil {
 			log.Print(err)
 			continue
 		}
@@ -70,9 +70,9 @@ func clientWriter(conn net.Conn, ch <-chan string) {
 type client chan<- string
 
 var (
-	entering  = make(chan client)
-	leaving   = make(chan client)
-	messages  = make(chan string)
+	entering = make(chan client)
+	leaving  = make(chan client)
+	messages = make(chan string)
 )
 
 func broadcaster() {
@@ -91,5 +91,3 @@ func broadcaster() {
 		}
 	}
 }
-
-

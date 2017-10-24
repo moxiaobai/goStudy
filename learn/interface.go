@@ -34,7 +34,7 @@ func main() {
 	a.printInfo()
 
 	// 调用pair类型p的String方法
-	p := pair{3,4}
+	p := pair{3, 4}
 	fmt.Println(p.String())
 
 	// 声明i为Stringer接口类型
@@ -44,7 +44,7 @@ func main() {
 }
 
 // 定义pair类型的方法，实现Stringer接口。
-func (p pair) String() string {  // p被叫做“接收器”
+func (p pair) String() string { // p被叫做“接收器”
 	return fmt.Sprintf("(%d, %d)", p.x, p.y)
 }
 

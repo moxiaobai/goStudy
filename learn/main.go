@@ -7,12 +7,15 @@ package main
 import (
 	"fmt"
 	"github.com/moxiaobai/goStudy/tools"
-	"sort"
 	"reflect"
+	"sort"
 )
 
 //全局变量的申明和复制
 var name = "gopher"
+
+//常量定义
+const KEY = "onemt99922"
 
 func main() {
 	fmt.Println("Hello World")
@@ -22,9 +25,9 @@ func main() {
 	arr := [5]int{1: 3, 3: 4}
 	learnArray(&arr)
 
-	learnSlice()
-	learnMap()
-	learnReflect()
+	//learnSlice()
+	//learnMap()
+	//learnReflect()
 	learnChan()
 }
 
@@ -119,5 +122,33 @@ func learnChan() {
 	}()
 	fmt.Println(<-ch)
 
-	//有缓冲通道
+	c := make(chan int)
+	go inc(0, c)
+	go inc(10, c)
+	go inc(-800, c)
+	// 打印出什么东西是不可预知的
+	fmt.Println(<-c, <-c, <-c)
+
+	cs := make(chan string)
+	cc := make(chan chan string)
+	go func() {
+		c <- 84
+	}()
+
+	go func() {
+		cs <- "world"
+	}()
+
+	select {
+	case i := <-c:
+		fmt.Println("这个....", i)
+	case <-cs:
+		fmt.Println("这是个字符串")
+	case <-cc:
+		fmt.Println("别瞎想")
+	}
+}
+
+func inc(i int, c chan int) {
+	c <- i + 1 // <-把右边的发送到左边的channel。
 }
