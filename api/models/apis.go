@@ -7,8 +7,8 @@ import (
 
 type Api struct {
 	Id    int        `json:"id" form:"id"`
-	Name  string     `json:"name" form:"name"`
-	Url   string     `json:"url" form:"url"`
+	Name  string     `json:"name" form:"name" binding:"required"`
+	Url   string     `json:"url" form:"url" binding:"required"`
 }
 
 //新增数据

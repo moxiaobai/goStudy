@@ -5,23 +5,22 @@ import (
 	"net/http"
 	"github.com/moxiaobai/goStudy/api/models"
 	"strconv"
-	"log"
 )
 
 //添加API
 func AddApisHandler(c *gin.Context) {
 	var api models.Api
-	if c.Bind(&api) != nil {
-		c.JSON(404, gin.H{"JSON=== status": "binding JSON error!"})
-		return
+
+	if err := c.ShouldBindJSON(&api); err == nil {
+		db   := models.InitDb()
+		id := db.AddApis(api)
+
+		c.JSON(http.StatusOK, gin.H{
+			"id" : id,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
-
-	db   := models.InitDb()
-	id := db.AddApis(api)
-
-	c.JSON(http.StatusOK, gin.H{
-		"id" : id,
-	})
 }
 
 //更新API
@@ -31,17 +30,19 @@ func UpdateApiHandler(c *gin.Context) {
 	id, _ := strconv.Atoi(cid)
 
 	var api models.Api
-	err := c.BindJSON(&api)
-	if err != nil {
-		log.Println(err)
+
+	if err := c.ShouldBindJSON(&api); err == nil {
+		db   := models.InitDb()
+		numbers := db.UpdateApi(id, api)
+
+		c.JSON(http.StatusOK, gin.H{
+			"numbers" : numbers,
+		})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	db   := models.InitDb()
-	numbers := db.UpdateApi(id, api)
 
-	c.JSON(http.StatusOK, gin.H{
-		"numbers" : numbers,
-	})
 }
 
 //删除API

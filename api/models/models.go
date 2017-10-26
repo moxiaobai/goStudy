@@ -15,7 +15,7 @@ func InitDb() *DbInstance {
 	var err error
 
 	db := DbInstance{
-		Dsn: "root:123456@tcp(192.168.6.120:3306)/demo",
+		Dsn: "root:12345678@tcp(127.0.0.1:3306)/demo",
 	}
 	db.Db, err = sql.Open("mysql", db.Dsn)
 	if err != nil {
