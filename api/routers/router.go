@@ -4,11 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/moxiaobai/goStudy/api/controllers"
 	"net/http"
+	"github.com/moxiaobai/goStudy/api/middleware"
 )
 
 func InitRoutes() *gin.Engine {
 	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	router.Use(middleware.Cors())
+
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "Welcome Gin Server")
 	})
@@ -17,10 +20,10 @@ func InitRoutes() *gin.Engine {
 	apis := router.Group("/apis")
 	{
 		apis.GET("/", controllers.ListApiHandler)
-		apis.GET("/:name", controllers.RetrieveApiHandler)
+		apis.GET("/:id", controllers.RetrieveApiHandler)
 		apis.POST("/", controllers.AddApisHandler)
-		apis.PATCH("/:name", controllers.UpdateApiHandler)
-		apis.DELETE("/:name", controllers.DeleteApiHandler)
+		apis.PATCH("/:id", controllers.UpdateApiHandler)
+		apis.DELETE("/:id", controllers.DeleteApiHandler)
 	}
 
 	return router
