@@ -26,5 +26,6 @@ func InitRoutes() *gin.Engine {
 		apis.DELETE("/:id", controllers.DeleteApiHandler)
 	}
 
+
 	return router
 }

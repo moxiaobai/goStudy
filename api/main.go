@@ -1,20 +1,28 @@
 package main
 
 import (
+	"context"
+	"github.com/gin-gonic/gin"
 	"github.com/moxiaobai/goStudy/api/routers"
-	"net/http"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
-	"context"
 	"time"
+	"io"
+	db "github.com/moxiaobai/goStudy/api/database"
 )
 
 func main() {
+	defer db.SqlDB.Close()
+
 	router := routers.InitRoutes()
 
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
+
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8082",
 		Handler: router,
 	}
 
