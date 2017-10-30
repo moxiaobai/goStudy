@@ -1,7 +1,6 @@
 package models
 
 import (
-	"log"
 	"time"
 	db "github.com/moxiaobai/goStudy/api/database"
 )
@@ -13,8 +12,13 @@ type Api struct {
 }
 
 //新增数据
-func (a Api) Add() (Id int, err error){
-	rs, err := db.SqlDB.Exec("INSERT INTO apis(name, url, addtime) VALUES (?, ?, ?)", a.Name, a.Url, time.Now().Unix())
+func (api Api) Add() (Id int, err error){
+	stmt, err := db.SqlDB.Prepare("INSERT INTO apis(name, url, addtime) VALUES (?, ?, ?)")
+	if err != nil {
+		return
+	}
+
+	rs, err := stmt.Exec(api.Name, api.Url, time.Now().Unix())
 	if err != nil {
 		return
 	}
@@ -29,8 +33,8 @@ func (a Api) Add() (Id int, err error){
 }
 
 //删除数据
-func (a Api) Delete() (rows int, err error) {
-	rs, err := db.SqlDB.Exec("DELETE FROM apis WHERE id=?", a.Id)
+func (api Api) Delete() (rows int, err error) {
+	rs, err := db.SqlDB.Exec("DELETE FROM apis WHERE id=?", api.Id)
 	if err != nil {
 		return
 	}
@@ -45,13 +49,13 @@ func (a Api) Delete() (rows int, err error) {
 }
 
 //更新数据
-func (a Api) Update() (rows int, err error) {
+func (api Api) Update() (rows int, err error) {
 	stmt, err := db.SqlDB.Prepare("UPDATE apis SET name=?, url=? WHERE id=?")
 	if err != nil {
 		return
 	}
 
-	rs, err := stmt.Exec(a.Name, a.Url, a.Id)
+	rs, err := stmt.Exec(api.Name, api.Url, api.Id)
 	if err != nil {
 		return
 	}
@@ -67,7 +71,7 @@ func (a Api) Update() (rows int, err error) {
 }
 
 //列出API
-func (a Api) List(offset, size int) (apis []Api, err error) {
+func (api Api) List(offset, size int) (apis []Api, err error) {
 	apis = make([]Api, 0)
 
 	page := (offset - 1) * size
@@ -87,6 +91,15 @@ func (a Api) List(offset, size int) (apis []Api, err error) {
 	}
 
 	defer rows.Close()
+	return
+}
+
+//统计数据
+func Count() (count int, err error) {
+	err = db.SqlDB.QueryRow("select COUNT(*) from apis").Scan(&count)
+	if err != nil {
+		return
+	}
 	return
 }
 

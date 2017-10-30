@@ -5,18 +5,30 @@ import (
 	"net/http"
 	. "github.com/moxiaobai/goStudy/api/models"
 	"strconv"
+	"github.com/gin-gonic/gin/binding"
+	"go.uber.org/zap"
+	"log"
 )
 
 //添加API
 func AddApisHandler(c *gin.Context) {
-	var a Api
-	if err := c.ShouldBindJSON(&a); err == nil {
-		id, _ := a.Add()
-
-		c.JSON(http.StatusOK, gin.H{"id" : id,})
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var api    Api
+	var err    error
+	contentType := c.Request.Header.Get("Content-Type")
+	switch contentType {
+	case "application/json":
+		err = c.ShouldBindJSON(&api)
+	case "application/x-www-form-urlencoded":
+		err = c.BindWith(&api, binding.Form)
 	}
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	id, _ := api.Add()
+	c.JSON(http.StatusOK, gin.H{"id" : id,})
 }
 
 //更新API
@@ -25,9 +37,9 @@ func UpdateApiHandler(c *gin.Context) {
 	//转换为整型
 	id, _ := strconv.Atoi(cid)
 
-	a := Api{Id: id}
-	if err := c.ShouldBindJSON(&a); err == nil {
-		numbers, _ := a.Update()
+	api := Api{Id: id}
+	if err := c.ShouldBindJSON(&api); err == nil {
+		numbers, _ := api.Update()
 
 		c.JSON(http.StatusOK, gin.H{"numbers" : numbers,})
 	} else {
@@ -40,8 +52,8 @@ func DeleteApiHandler(c *gin.Context) {
 	cid := c.Param("id")
 	id, _ := strconv.Atoi(cid)
 
-	a := Api{Id: id}
-	numbers, _ :=  a.Delete()
+	api := Api{Id: id}
+	numbers, _ :=  api.Delete()
 
 	c.JSON(http.StatusOK, gin.H{"numbers" : numbers,})
 }
@@ -51,11 +63,16 @@ func ListApiHandler(c *gin.Context) {
 	cSize   := c.DefaultQuery("size", "2")
 	cOffset := c.DefaultQuery("offset", "1")
 
+
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+	logger.Info("failed to fetch URL", )
+
 	size, _  := strconv.Atoi(cSize)
 	offset,_ := strconv.Atoi(cOffset)
 
-	var a Api
-	apis,_ := a.List(offset, size)
+	var api Api
+	apis,_ := api.List(offset, size)
 
 	c.JSON(http.StatusOK, gin.H{"apis" : apis,})
 }
@@ -64,6 +81,8 @@ func ListApiHandler(c *gin.Context) {
 func RetrieveApiHandler(c *gin.Context) {
 	cid := c.Param("id")
 	id, _ := strconv.Atoi(cid)
+
+	log.Print("hello")
 
 	a := Api{Id: id}
 	api, err  := a.Retrieve()

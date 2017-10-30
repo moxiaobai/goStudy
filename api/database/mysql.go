@@ -14,9 +14,4 @@ func init() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
-	err = SqlDB.Ping()
-	if err != nil {
-		log.Fatal(err.Error())
-	}
 }
