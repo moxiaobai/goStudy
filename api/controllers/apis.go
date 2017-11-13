@@ -28,6 +28,10 @@ func AddApisHandler(c *gin.Context) {
 	}
 
 	id, _ := api.Add()
+	if id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Fail"})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"id" : id,})
 }
 
