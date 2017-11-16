@@ -9,15 +9,20 @@ import (
 	"os/signal"
 	"time"
 	db "github.com/moxiaobai/goStudy/api/database"
+	 "github.com/moxiaobai/goStudy/api/config"
 )
+
+
 
 func main() {
 	defer db.SqlDB.Close()
 
 	router := routers.InitRoutes()
 
+	config := config.GetConfig()
+
 	srv := &http.Server{
-		Addr:    ":8082",
+		Addr:   config.Host,
 		Handler: router,
 	}
 

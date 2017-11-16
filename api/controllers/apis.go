@@ -6,7 +6,7 @@ import (
 	. "github.com/moxiaobai/goStudy/api/models"
 	"strconv"
 	"github.com/gin-gonic/gin/binding"
-	"go.uber.org/zap"
+	//"go.uber.org/zap"
 	"log"
 )
 
@@ -68,9 +68,9 @@ func ListApiHandler(c *gin.Context) {
 	cOffset := c.DefaultQuery("offset", "1")
 
 
-	logger, _ := zap.NewProduction()
-	defer logger.Sync()
-	logger.Info("failed to fetch URL", )
+	//logger, _ := zap.NewProduction()
+	//defer logger.Sync()
+	//logger.Info("failed to fetch URL", )
 
 	size, _  := strconv.Atoi(cSize)
 	offset,_ := strconv.Atoi(cOffset)

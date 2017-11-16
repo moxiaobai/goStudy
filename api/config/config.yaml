@@ -1,0 +1,10 @@
+# server config
+
+Port : 8082
+
+#mysql config
+Mysqls:
+  Hosts: 127.0.0.1
+  User: root
+  Password: 12345678
+  Database: demo
