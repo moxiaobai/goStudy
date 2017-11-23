@@ -17,8 +17,10 @@ import (
 func main() {
 	defer db.SqlDB.Close()
 
+	//初始化路由
 	router := routers.InitRoutes()
 
+	//获取配置
 	config := config.GetConfig()
 
 	srv := &http.Server{

@@ -17,9 +17,15 @@ type (
 	}
 )
 
+var (
+	configTOML = "config/config.toml"
+	configYAML = "config/config.yaml"
+	configJSON = "config/config.json"
+)
+
 func GetConfig() *ServerConfig  {
 	//读取配置
-	m := multiconfig.NewWithPath("config/config.toml")
+	m := multiconfig.NewWithPath(configJSON)
 	c := &ServerConfig{}
 	m.MustLoad(c)
 

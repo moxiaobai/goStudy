@@ -1,10 +1,5 @@
-# server config
-
-Port : 8082
-
-#mysql config
-Mysqls:
-  Hosts: 127.0.0.1
-  User: root
-  Password: 12345678
-  Database: demo
+Name: Gin
+Host: ':8082'
+Database:
+    Driver: mysql
+    Source: 'root:12345678@tcp(127.0.0.1:3306)/demo'
