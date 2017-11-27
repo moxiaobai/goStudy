@@ -20,7 +20,7 @@ func InitRoutes() *gin.Engine {
 	apis := router.Group("/apis")
 	{
 		apis.GET("/", controllers.ListApiHandler)
-		apis.GET("/:id", middleware.Auth(), controllers.RetrieveApiHandler)
+		apis.GET("/:id", controllers.RetrieveApiHandler)
 		apis.POST("/", controllers.AddApisHandler)
 		apis.PATCH("/:id", controllers.UpdateApiHandler)
 		apis.DELETE("/:id", controllers.DeleteApiHandler)
